@@ -74,12 +74,12 @@ const createStudent = async function (req, res) {
       if(!studentId) return res.status(400).send({status:false, message: 'Admin id required'})
 
       const id = await adminModel.findOne({_id:adminId})
-      const id1 = await adminModel.findOne({_id:studentId})
+      const id1 = await studentM.findOne({_id:studentId})
 
       if(!id) return res.status(400).send({status:false, message: 'Admin  not found'})
-      if(!id1) return res.status(400).send({status:false, message: 'student  not found or removed'})
+      if(id1.isDelete==true) return res.status(400).send({status:false, message: 'student  not found or removed'})
   
-      const deleteRecord = await studentM.findOneAndUpdate({_id:studentId},{$set:{isDelete:true}}, {new:true})
+      const deleteRecord = await studentM.findOneAndUpdate({_id:studentId},{isDelete:true}, {new:true})
       
       return res.status(201).send({status:true, message: "Student Removed successfully", data: deleteRecord })
   
