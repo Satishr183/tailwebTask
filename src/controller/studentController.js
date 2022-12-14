@@ -20,7 +20,7 @@ const createStudent = async function (req, res) {
 
         const name = req.query.name;
         const subject = req.query.subject;
-        const query = {};
+        const query = {isDelete:false};
         if (name) {
             query.name = name;
           }
@@ -51,7 +51,9 @@ const createStudent = async function (req, res) {
       if(!id) return res.status(400).send({status:false, message: 'Admin id not found'})
   
       const updateData = await studentM.findOneAndUpdate({_id:studentId},{$set:{marks:marks}}, {new:true})
-      updateData.total=updateData.total+updateData.marks
+      let total=0
+      total=total+updateData.marks
+      updateData.total+=total
       await updateData.save()
       const studentDetails = {updateData}
   
